@@ -1,0 +1,90 @@
+﻿@using ArBlog.Extensions
+@inject NavigationManager NavigationManager
+
+<nav class="topnav navbar navbar-expand-lg navbar-light bg-white fixed-top">
+	<div class="container">
+		<a class="navbar-brand" href="/"><strong>AR Blog</strong></a>
+		<button class="navbar-toggler collapsed" type="button" onclick="toggleMenu(event)" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="navbar-collapse collapse" id="top-navbar-menu-wrapper" style="">
+			<ul class="navbar-nav mr-auto d-flex align-items-center">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Intro <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="category">Category</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="category">Tech</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="category">Politics</a>
+				</li>						  
+				<li class="nav-item">		  
+					<a class="nav-link" href="category">Health</a>
+				</li>						  
+				<li class="nav-item">		  
+					<a class="nav-link" href="category">Collections</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./about.html">About</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./docs.html">Template <span class="badge badge-secondary">docs</span></a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto d-flex align-items-center">
+				<AuthorizeView>
+					<Authorized>
+						<li class="nav-item">
+							<a class="nav-link" href="/">@context.User.GetUserName()</a>
+						</li>
+						<li class="nav-item highlight">
+							<form action="Account/Logout" method="post">
+								<AntiforgeryToken />
+								<input type="hidden" name="ReturnUrl" value="@baseUrl" />
+								<button type="submit" class="nav-link">
+									<span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+								</button>
+							</form>
+						</li>
+					</Authorized>
+					<NotAuthorized>
+						@{
+							if(currentUrl != null && !currentUrl.EndsWith("Account/Login"))
+                            {
+								<li class="nav-item highlight">
+									<a class="nav-link" href="Account/Login">Login</a>
+								</li>
+                            }
+						}
+					</NotAuthorized>
+				</AuthorizeView>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+@code {
+	private string? baseUrl;
+	private string? currentUrl;
+
+	protected override void OnInitialized()
+	{
+		currentUrl = NavigationManager.Uri;
+		baseUrl = NavigationManager.ToBaseRelativePath(NavigationManager.BaseUri);
+		NavigationManager.LocationChanged += OnLocationChanged;
+	}
+
+	private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+	{
+		baseUrl = NavigationManager.ToBaseRelativePath(e.Location);
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		NavigationManager.LocationChanged -= OnLocationChanged;
+	}
+}
