@@ -1,0 +1,30 @@
+﻿@using ArBlog.Extensions
+@using Microsoft.AspNetCore.Components.Sections
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+@layout MainLayout
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-2 bg-gray py-3 admin-menu">
+            <AuthorizeView>
+                <Authorized>
+                    <h6 class="text-center font-weight-bold">Welcome @context.User.GetUserName()</h6>
+                    <hr />
+                </Authorized>
+            </AuthorizeView>
+            <div class="list-group">
+                <NavLink href="admin/manage-categories" class="list-group-item list-group-item-action">Manage Categories</NavLink>
+                <NavLink href="admin/manage-blog-posts" class="list-group-item list-group-item-action">Manage Blog Posts</NavLink>
+                <NavLink href="admin/manage-subscribers" class="list-group-item list-group-item-action">Manage Subscribers</NavLink>
+                <div class="list-group-item list-group-item-action">
+                    <LogoutForm ButtonStyle="btn btn-sm btn-danger" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-10 admin-content">
+            @Body
+        </div>
+    </div>
+</div>

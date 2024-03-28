@@ -1,0 +1,13 @@
+﻿<div class="overlay fullscreen-fixed"></div>
+<div class="overlay-content fullscreen-fixed d-flex justify-content-center align-items-center">
+    <div class="bg-white shadow-lg p-3 rounded">
+        <label class="text-primary mb-0">@LoadingText</label>
+    </div>
+    
+</div>
+
+
+@code {
+    [Parameter]
+    public string LoadingText { get; set; } = "Loading...";
+}

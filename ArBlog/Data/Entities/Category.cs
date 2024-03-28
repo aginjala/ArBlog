@@ -15,6 +15,8 @@ namespace ArBlog.Data.Entities
 		public DateTime UpdatedAt { get; set; }
 		public ICollection<BlogPost> Posts { get; set; }
 
+		public Category Clone() => (Category)MemberwiseClone();
+
 		internal static List<Category> GetSeedCategories()
 		{
 			return new List<Category>()

@@ -1,0 +1,106 @@
+﻿@page "/admin/manage-categories"
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+@* Prerender is not needed for Admin pages *@
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+<AdminHeader Title="Manage Categories">
+    <ActionButtons>
+        <button type="button" class="btn btn-primary btn-sm" @onclick="() => _operatingCategory = new()">
+            Add New Category
+        </button>
+    </ActionButtons>
+</AdminHeader>
+
+@if(_isLoading)
+{
+    <Loading />
+}
+
+@if (_operatingCategory != null)
+{
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <EditForm Model="_operatingCategory" OnValidSubmit="SaveCategoryAsync">
+                <DataAnnotationsValidator />
+                <div class="shadow p-3">
+                    <div class="d-flex flex-column gap-2">
+                        <div>
+                            <label class="form-label">Name</label>
+                            <InputText @bind-Value="_operatingCategory.Name"
+                                       class="form-control form-control-sm" placeholder="Category Name" />
+                            <ValidationMessage For="@(() => _operatingCategory.Name)" />
+                        </div>
+                        <div>
+                            <label class="form-label mt-2">
+                                Show on Navbar
+                                <InputCheckbox @bind-Value="_operatingCategory.ShowOnNavbar" class="form-check" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                        <button type="button" class="btn btn-danger btn-sm ml-2" @onclick="() => _operatingCategory = null">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<QuickGrid Items="@_categories" Class="table table-bordered table-striped table-hover">
+    @* <PropertyColumn Property="@(c => c.Id)" /> *@
+    <PropertyColumn Property="@(c => c.Name)" />
+    <PropertyColumn Property="@(c => c.Slug)" />
+    <TemplateColumn Title="Show on Navbar" Class="text-center">
+        <label>
+            @* <span class=@(context.ShowOnNavbar ? "text-success" : "text-danger" )>@(context.ShowOnNavbar ? "Yes" : "No")</span> *@
+            <input type="checkbox" disabled checked="@context.ShowOnNavbar" @onchange="@(() => HandleToggleShowOnNavbar(context))" />
+        </label>
+    </TemplateColumn>
+    <TemplateColumn>
+        <button type="button" class="btn btn-sm btn-primary" @onclick="() => HandleEditCategory(context)">Edit</button>
+        @* <button type="button" class="btn btn-sm btn-danger">Delete</button> *@
+    </TemplateColumn>
+
+</QuickGrid>
+
+@code {
+    private IQueryable<Category> _categories = new List<Category>().AsQueryable();
+    private Category? _operatingCategory;
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _categories = (await CategoryService.GetCategoriesAsync()).AsQueryable();
+        _isLoading = false;
+    }
+
+    private async Task HandleToggleShowOnNavbar(Category category)
+    {
+        category.ShowOnNavbar = !category.ShowOnNavbar;
+        await CategoryService.SaveCategoryAsync(category);
+    }
+
+    private void HandleEditCategory(Category category) => _operatingCategory = category.Clone();
+
+    private async Task SaveCategoryAsync()
+    {
+        if(_operatingCategory != null)
+        {
+            _isLoading = true;
+            await CategoryService.SaveCategoryAsync(_operatingCategory!);
+            _categories = (await CategoryService.GetCategoriesAsync()).AsQueryable();
+            _operatingCategory = null;
+            NavigationManager.Refresh();
+            _isLoading = false;
+        }
+    }
+}

@@ -54,5 +54,35 @@ h1:focus {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 250px);
+    min-height: calc(100vh - 200px);
+}
+
+.admin-menu {
+    min-height: calc(100vh - 200px);
+}
+
+.admin-content {
+    min-height: calc(100vh - 200px);
+}
+
+.fullscreen-fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.overlay {
+    opacity: 0.5;
+    z-index: 1050;
+    background: black
+}
+
+.overlay-content {
+    z-index: 1051;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
 }
