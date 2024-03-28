@@ -6,7 +6,7 @@ namespace ArBlog.Services
     {
         Task<Category[]> GetCategoriesAsync();
 
-        Task<Category?> GetCategoryBySlug(string slug);
+        Task<Category?> GetCategoryBySlugAsync(string slug);
 
         Task<Category> SaveCategoryAsync(Category category);
     }

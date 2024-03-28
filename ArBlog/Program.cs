@@ -45,7 +45,8 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 builder.Services.AddTransient<ISeedService, SeedService>()
                 .AddTransient<ICategoryService, CategoryService>()
-                .AddTransient<IBlogPostAdminService, BlogPostAdminService>();
+                .AddTransient<IBlogPostAdminService, BlogPostAdminService>()
+                .AddTransient<IBlogPostService, BlogPostService>();
 
 var app = builder.Build();
 

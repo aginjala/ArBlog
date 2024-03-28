@@ -25,7 +25,7 @@
     <script src="_content/Blazored.TextEditor/Blazored-BlazorQuill.js"></script>
 </SectionContent>
 
-<AdminHeader Title="Create New Blog Post">
+<AdminHeader Title="@(Id.HasValue && Id > 0 ? "Update Blog Post" : "Create New Blog Post")">
     <ActionButtons>
         <NavLink href="/admin/manage-blog-posts" class="btn-sm btn-primary">Back</NavLink>
     </ActionButtons>

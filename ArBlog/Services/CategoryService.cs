@@ -59,7 +59,7 @@ namespace ArBlog.Services
             return savedCategory;
         }
 
-        public async Task<Category?> GetCategoryBySlug(string slug) =>
+        public async Task<Category?> GetCategoryBySlugAsync(string slug) =>
             await ExecuteOnContextAsync(async context =>
             {
                 return await context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Slug == slug);

@@ -5,16 +5,16 @@
 
 <nav class="topnav navbar navbar-expand-lg navbar-light bg-white fixed-top">
 	<div class="container">
-		<a class="navbar-brand" href="/"><strong>AR Blog</strong></a>
+		<a class="navbar-brand" href="/"><strong>AR Blazor Blog</strong></a>
 		<button class="navbar-toggler collapsed" type="button" onclick="toggleMenu(event)" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="navbar-collapse collapse" id="top-navbar-menu-wrapper" style="">
 			<ul class="navbar-nav mr-auto d-flex align-items-center">
-				@foreach (var category in _categories)
+				@foreach (var c in _categories)
 				{
 					<li class="nav-item">
-						<a class="nav-link" href="@category.Slug">@category.Name</a>
+						<a class="nav-link" href="@c.Slug-posts" title="@c.Name Posts">@c.Name</a>
 					</li>
 				}
 			</ul>
@@ -52,7 +52,7 @@
 	{
 		_currentUrl = NavigationManager.Uri;
 		var categories = await CategoryService.GetCategoriesAsync();
-		_categories = categories.Where(c => c.ShowOnNavbar).Take(5).ToArray();
+		_categories = categories.Where(c => c.ShowOnNavbar).Take(7).ToArray();
 
 		if (_categories.Length < 5)
 		{

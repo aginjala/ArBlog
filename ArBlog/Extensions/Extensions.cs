@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ArBlog.Extensions
 {
-    public static partial class Extensions
+	public static partial class Extensions
     {
         [GeneratedRegex(@"[^0-9a-z]")]
         private static partial Regex SlugRegex();
@@ -20,5 +20,7 @@ namespace ArBlog.Extensions
                               .Replace("--", "-")
                               .Trim('-');
         }
+
+        public static string ToDisplay(this DateTime? dateTime) => dateTime?.ToString("MMM dd") ?? string.Empty;
     }
 }

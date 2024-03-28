@@ -1,0 +1,25 @@
+﻿@using ArBlog.Extensions
+
+@foreach (var b in Posts)
+{
+	<div class="mb-3 d-flex justify-content-between">
+		<div class="pr-3">
+			<h2 class="mb-1 h4 font-weight-bold">
+				<a class="text-dark" href="posts/@b.Slug">@b.Title</a>
+			</h2>
+			<p>
+				@b.Introduction
+			</p>
+			<div class="card-text text-muted small">
+				@b.User.Name <a href="@b.Category.Slug-posts" title="@b.Category.Name Posts">@b.Category.Name</a>
+			</div>
+			<small class="text-muted">@b.PublishedAt.ToDisplay()</small>
+		</div>
+		<img height="120" src="@b.Image">
+	</div>
+}
+
+@code {
+	[Parameter, EditorRequired]
+	public BlogPost[] Posts { get; set; } = [];
+}
